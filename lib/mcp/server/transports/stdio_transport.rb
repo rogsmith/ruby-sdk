@@ -8,6 +8,11 @@ module MCP
     module Transports
       class StdioTransport < Transport
         STATUS_INTERRUPTED = Signal.list["INT"] + 128
+        class << self
+          def register
+            super("stdio", self)
+          end
+        end
 
         def initialize(server)
           @server = server
@@ -30,6 +35,12 @@ module MCP
 
         def close
           @open = false
+        end
+
+        def send_response(message)
+          json_message = message.is_a?(String) ? message : JSON.generate(message)
+          $stdout.puts(json_message)
+          $stdout.flush
         end
 
         def send_response(message)
