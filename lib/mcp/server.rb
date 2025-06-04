@@ -3,6 +3,7 @@
 require "json_rpc_handler"
 require_relative "instrumentation"
 require_relative "methods"
+require_relative "server/capabilities"
 
 module MCP
   class Server
