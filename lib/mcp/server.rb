@@ -46,6 +46,10 @@ module MCP
       @resource_index = index_resources_by_uri(resources)
       @server_context = server_context
       @configuration = MCP.configuration.merge(configuration)
+      @capabilities = Capabilities.new(capabilities)
+      @capabilities.support_tools if tools.any?
+      @capabilities.support_prompts if prompts.any?
+      @capabilities.support_resources if resources.any? || resource_templates.any?
 
       @handlers = {
         Methods::RESOURCES_LIST => method(:list_resources),
@@ -67,7 +71,7 @@ module MCP
     end
 
     def capabilities
-      @capabilities ||= determine_capabilities
+      @capabilities.to_h
     end
 
     def handle(request)
@@ -93,6 +97,7 @@ module MCP
     end
 
     def resources_list_handler(&block)
+      @capabilities.support_resources
       @handlers[Methods::RESOURCES_LIST] = block
     end
 
@@ -101,10 +106,12 @@ module MCP
     end
 
     def resources_templates_list_handler(&block)
+      @capabilities.support_resources
       @handlers[Methods::RESOURCES_TEMPLATES_LIST] = block
     end
 
     def tools_list_handler(&block)
+      @capabilities.support_tools
       @handlers[Methods::TOOLS_LIST] = block
     end
 
@@ -113,6 +120,7 @@ module MCP
     end
 
     def prompts_list_handler(&block)
+      @capabilities.support_prompts
       @handlers[Methods::PROMPTS_LIST] = block
     end
 
@@ -158,18 +166,6 @@ module MCP
           raise RequestHandlerError.new("Internal error handling #{method} request", request, original_error: e)
         end
       }
-    end
-
-    def determine_capabilities
-      defines_prompts = @prompts.any? || @handlers[Methods::PROMPTS_LIST] != method(:list_prompts)
-      defines_tools = @tools.any? || @handlers[Methods::TOOLS_LIST] != method(:list_tools)
-      defines_resources = @resources.any? || @handlers[Methods::RESOURCES_LIST] != method(:list_resources)
-      defines_resource_templates = @resource_templates.any? || @handlers[Methods::RESOURCES_TEMPLATES_LIST] != method(:list_resource_templates)
-      {
-        prompts: defines_prompts ? {} : nil,
-        resources: defines_resources || defines_resource_templates ? {} : nil,
-        tools: defines_tools ? {} : nil,
-      }.compact
     end
 
     def server_info
