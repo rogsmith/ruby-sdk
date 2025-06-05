@@ -1,4 +1,4 @@
-# MCP Ruby SDK ![Gem Version](https://img.shields.io/gem/v/mcp) ![MIT licensed](https://img.shields.io/badge/license-MIT-green)
+# MCP Ruby SDK ![Gem Version](https://img.shields.io/gem/v/mcp) ![MIT licensed](https://img.shields.io/badge/license-MIT-green) [![CI](https://github.com/modelcontextprotocol/ruby-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/modelcontextprotocol/ruby-sdk/actions/workflows/ci.yml)
 
 The official Ruby SDK for Model Context Protocol servers and clients.
 
