@@ -1,6 +1,6 @@
-# Model Context Protocol
+# MCP Ruby SDK ![Gem Version](https://img.shields.io/gem/v/mcp) ![MIT licensed](https://img.shields.io/badge/license-MIT-green)
 
-A Ruby gem for implementing Model Context Protocol servers
+The official Ruby SDK for Model Context Protocol servers and clients.
 
 ## Installation
 
