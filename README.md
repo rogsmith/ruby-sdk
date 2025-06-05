@@ -437,8 +437,8 @@ To register a handler pass a proc/lambda to as `instrumentation_callback` into t
 MCP.configure do |config|
   config.instrumentation_callback = ->(data) {
     puts "Got instrumentation data #{data.inspect}"
-  end
-}
+  }
+end
 ```
 
 The data contains the following keys:
