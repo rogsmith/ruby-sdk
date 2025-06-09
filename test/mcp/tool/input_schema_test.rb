@@ -51,6 +51,16 @@ module MCP
           schema.validate_arguments({ foo: 123 })
         end
       end
+
+      test "unexpected errors bubble up from validate_arguments" do
+        schema = InputSchema.new(properties: { foo: { type: "string" } }, required: [:foo])
+
+        JSON::Validator.stub(:fully_validate, ->(*) { raise "unexpected error" }) do
+          assert_raises(RuntimeError) do
+            schema.validate_arguments({ foo: "bar" })
+          end
+        end
+      end
     end
   end
 end

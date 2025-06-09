@@ -38,18 +38,14 @@ module MCP
 
       def validate_schema!
         schema = to_h
-        begin
-          schema_reader = JSON::Schema::Reader.new(
-            accept_uri: false,
-            accept_file: ->(path) { path.to_s.start_with?(Gem.loaded_specs["json-schema"].full_gem_path) },
-          )
-          metaschema = JSON::Validator.validator_for_name("draft4").metaschema
-          errors = JSON::Validator.fully_validate(metaschema, schema, schema_reader: schema_reader)
-          if errors.any?
-            raise ArgumentError, "Invalid JSON Schema: #{errors.join(", ")}"
-          end
-        rescue StandardError => e
-          raise ArgumentError, "Invalid JSON Schema: #{e.message}"
+        schema_reader = JSON::Schema::Reader.new(
+          accept_uri: false,
+          accept_file: ->(path) { path.to_s.start_with?(Gem.loaded_specs["json-schema"].full_gem_path) },
+        )
+        metaschema = JSON::Validator.validator_for_name("draft4").metaschema
+        errors = JSON::Validator.fully_validate(metaschema, schema, schema_reader: schema_reader)
+        if errors.any?
+          raise ArgumentError, "Invalid JSON Schema: #{errors.join(", ")}"
         end
       end
     end
