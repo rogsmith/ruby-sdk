@@ -162,7 +162,7 @@ module MCP
 
         def parse_request_body(body_string)
           JSON.parse(body_string)
-        rescue JSON::ParserError
+        rescue JSON::ParserError, TypeError
           [400, { "Content-Type" => "application/json" }, [{ error: "Invalid JSON" }.to_json]]
         end
 
