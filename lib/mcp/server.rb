@@ -150,7 +150,7 @@ module MCP
           report_exception(e, { request: request })
           if e.is_a?(RequestHandlerError)
             add_instrumentation_data(error: e.error_type)
-            raise StandardError, e.message
+            raise e
           end
 
           add_instrumentation_data(error: :internal_error)
