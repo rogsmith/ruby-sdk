@@ -121,7 +121,6 @@ app = proc do |env|
   end
 
   # Handle the request
-  puts "request: #{request.inspect}"
   response = transport.handle_request(request)
 
   # Log the MCP response details
