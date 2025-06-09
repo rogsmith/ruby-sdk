@@ -249,7 +249,7 @@ module MCP
         properties: {
           foo: { "$ref" => "#/definitions/bar" },
         },
-        required: [],
+        required: ["foo"],
         definitions: {
           bar: { type: "string" },
         },

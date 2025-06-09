@@ -61,6 +61,18 @@ module MCP
           end
         end
       end
+
+      test "rejects schemas with $ref references" do
+        assert_raises(ArgumentError) do
+          InputSchema.new(properties: { foo: { "$ref" => "#/definitions/bar" } }, required: [:foo])
+        end
+      end
+
+      test "rejects schemas with symbol $ref references" do
+        assert_raises(ArgumentError) do
+          InputSchema.new(properties: { foo: { :$ref => "#/definitions/bar" } }, required: [:foo])
+        end
+      end
     end
   end
 end

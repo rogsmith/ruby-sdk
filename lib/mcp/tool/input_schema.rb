@@ -37,6 +37,7 @@ module MCP
       private
 
       def validate_schema!
+        check_for_refs!
         schema = to_h
         schema_reader = JSON::Schema::Reader.new(
           accept_uri: false,
@@ -46,6 +47,19 @@ module MCP
         errors = JSON::Validator.fully_validate(metaschema, schema, schema_reader: schema_reader)
         if errors.any?
           raise ArgumentError, "Invalid JSON Schema: #{errors.join(", ")}"
+        end
+      end
+
+      def check_for_refs!(obj = properties)
+        case obj
+        when Hash
+          if obj.key?("$ref") || obj.key?(:$ref)
+            raise ArgumentError, "Invalid JSON Schema: $ref is not allowed in tool input schemas"
+          end
+
+          obj.each_value { |value| check_for_refs!(value) }
+        when Array
+          obj.each { |item| check_for_refs!(item) }
         end
       end
     end
