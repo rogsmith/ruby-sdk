@@ -244,7 +244,7 @@ This will make all new server instances use the specified protocol version inste
 MCP::Server.protocol_version = nil
 ```
 
-Be sure to check the [MCP spec](https://spec.modelcontextprotocol.io/specification/2024-11-05/) for the protocol version to understand the supported features for the version being set.
+Be sure to check the [MCP spec](https://modelcontextprotocol.io/specification/2025-03-26) for the protocol version to understand the supported features for the version being set.
 
 ### Exception Reporting
 
