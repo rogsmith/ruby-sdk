@@ -125,7 +125,7 @@ app = proc do |env|
 
   # Log the MCP response details
   _, _, body = response
-  if body.is_a?(Array) && !body.empty?
+  if body.is_a?(Array) && !body.empty? && body.first
     begin
       parsed_response = JSON.parse(body.first)
       if parsed_response["error"]
