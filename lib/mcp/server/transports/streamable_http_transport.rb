@@ -8,12 +8,6 @@ module MCP
   class Server
     module Transports
       class StreamableHTTPTransport < Transport
-        class << self
-          def register
-            super("http", self)
-          end
-        end
-
         def initialize(server)
           super
           # { session_id => { stream: stream_object }

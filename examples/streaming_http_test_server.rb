@@ -137,7 +137,7 @@ rack_app = Rack::Builder.new do
 end
 
 # Print usage instructions
-puts "=== MCP SSE Test Server ==="
+puts "=== MCP Streaming HTTP Test Server ==="
 puts ""
 puts "Starting server on http://localhost:9393"
 puts ""

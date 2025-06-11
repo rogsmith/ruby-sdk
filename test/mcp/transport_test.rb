@@ -28,22 +28,6 @@ module MCP
         resources: [],
       )
       @transport = TestTransport.new(@server)
-      # Clear transports registry before each test
-      Transport.instance_variable_set(:@transports, nil)
-    end
-
-    teardown do
-      # Clear transports registry after each test
-      Transport.instance_variable_set(:@transports, nil)
-    end
-
-    test "registers transport class" do
-      Transport.register("test", TestTransport)
-      assert_equal TestTransport, Transport.get("test")
-    end
-
-    test "raises error for unknown transport" do
-      assert_raises(RuntimeError, "Transport unknown not found") { Transport.get("unknown") }
     end
 
     test "initializes with server instance" do

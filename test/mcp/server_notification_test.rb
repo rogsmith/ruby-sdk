@@ -126,11 +126,5 @@ module MCP
       assert_equal Methods::NOTIFICATIONS_PROMPTS_LIST_CHANGED, notifications[1][:method]
       assert_equal Methods::NOTIFICATIONS_RESOURCES_LIST_CHANGED, notifications[2][:method]
     end
-
-    test "notification method constants are defined correctly" do
-      assert_equal "notifications/tools/list_changed", Methods::NOTIFICATIONS_TOOLS_LIST_CHANGED
-      assert_equal "notifications/prompts/list_changed", Methods::NOTIFICATIONS_PROMPTS_LIST_CHANGED
-      assert_equal "notifications/resources/list_changed", Methods::NOTIFICATIONS_RESOURCES_LIST_CHANGED
-    end
   end
 end

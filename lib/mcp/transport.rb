@@ -2,19 +2,6 @@
 
 module MCP
   class Transport
-    class << self
-      def register(name, transport_class)
-        @transports ||= {}
-        @transports[name] = transport_class
-      end
-
-      def get(name)
-        raise "Transport #{name} not found" unless @transports
-
-        @transports.fetch(name) { raise "Transport #{name} not found" }
-      end
-    end
-
     # Initialize the transport with the server instance
     def initialize(server)
       @server = server

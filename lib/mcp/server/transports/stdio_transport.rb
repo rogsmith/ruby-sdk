@@ -8,11 +8,6 @@ module MCP
     module Transports
       class StdioTransport < Transport
         STATUS_INTERRUPTED = Signal.list["INT"] + 128
-        class << self
-          def register
-            super("stdio", self)
-          end
-        end
 
         def initialize(server)
           @server = server
