@@ -106,7 +106,7 @@ module MCP
             handle_regular_request(body_string, session_id)
           end
         rescue StandardError => e
-          ModelContextProtocol.configuration.exception_reporter.call(e, { request: body_string })
+          MCP.configuration.exception_reporter.call(e, { request: body_string })
           [500, { "Content-Type" => "application/json" }, [{ error: "Internal server error" }.to_json]]
         end
 
@@ -204,7 +204,7 @@ module MCP
           send_to_stream(stream, message)
           [200, { "Content-Type" => "application/json" }, [{ accepted: true }.to_json]]
         rescue IOError, Errno::EPIPE => e
-          ModelContextProtocol.configuration.exception_reporter.call(
+          MCP.configuration.exception_reporter.call(
             e,
             { session_id: session_id, error: "Stream closed during response" },
           )

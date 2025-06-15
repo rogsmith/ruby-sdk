@@ -113,6 +113,106 @@ module MCP
           assert response[2].is_a?(Proc) # The body should be a Proc for streaming
         end
 
+        test "handles POST request when IOError raised" do
+          # Create and initialize a session
+          init_request = create_rack_request(
+            "POST",
+            "/",
+            { "CONTENT_TYPE" => "application/json" },
+            { jsonrpc: "2.0", method: "initialize", id: "123" }.to_json,
+          )
+          init_response = @transport.handle_request(init_request)
+          session_id = init_response[1]["Mcp-Session-Id"]
+
+          # Connect with SSE
+          io = StringIO.new
+          get_request = create_rack_request(
+            "GET",
+            "/",
+            { "HTTP_MCP_SESSION_ID" => session_id },
+          )
+          response = @transport.handle_request(get_request)
+          response[2].call(io) if response[2].is_a?(Proc)
+
+          # Give the stream time to set up
+          sleep(0.1)
+
+          # Close the stream
+          io.close
+
+          request = create_rack_request(
+            "POST",
+            "/",
+            {
+              "CONTENT_TYPE" => "application/json",
+              "HTTP_MCP_SESSION_ID" => session_id,
+            },
+            { jsonrpc: "2.0", method: "ping", id: "456" }.to_json,
+          )
+
+          # This should handle IOError and return the original response
+          response = @transport.handle_request(request)
+          assert_equal 200, response[0]
+          assert_equal({ "Content-Type" => "application/json" }, response[1])
+
+          # Verify session was cleaned up
+          assert_not @transport.instance_variable_get(:@sessions).key?(session_id)
+        end
+
+        test "handles POST request when Errno::EPIPE raised" do
+          # Create and initialize a session
+          init_request = create_rack_request(
+            "POST",
+            "/",
+            { "CONTENT_TYPE" => "application/json" },
+            { jsonrpc: "2.0", method: "initialize", id: "123" }.to_json,
+          )
+          init_response = @transport.handle_request(init_request)
+          session_id = init_response[1]["Mcp-Session-Id"]
+
+          # Create a pipe to simulate EPIPE condition
+          reader, writer = IO.pipe
+
+          # Connect with SSE using the writer end of the pipe
+          get_request = create_rack_request(
+            "GET",
+            "/",
+            { "HTTP_MCP_SESSION_ID" => session_id },
+          )
+          response = @transport.handle_request(get_request)
+          response[2].call(writer) if response[2].is_a?(Proc)
+
+          # Give the stream time to set up
+          sleep(0.1)
+
+          # Close the reader end to break the pipe - this will cause EPIPE on write
+          reader.close
+
+          request = create_rack_request(
+            "POST",
+            "/",
+            {
+              "CONTENT_TYPE" => "application/json",
+              "HTTP_MCP_SESSION_ID" => session_id,
+            },
+            { jsonrpc: "2.0", method: "ping", id: "789" }.to_json,
+          )
+
+          # This should handle Errno::EPIPE and return the original response
+          response = @transport.handle_request(request)
+          assert_equal 200, response[0]
+          assert_equal({ "Content-Type" => "application/json" }, response[1])
+
+          # Verify session was cleaned up
+          assert_not @transport.instance_variable_get(:@sessions).key?(session_id)
+
+          begin
+            writer.close
+          rescue
+            nil
+          end
+        end
+
         test "handles GET request with missing session ID" do
           request = create_rack_request(
             "GET",
