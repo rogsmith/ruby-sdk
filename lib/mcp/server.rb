@@ -176,7 +176,6 @@ module MCP
     end
 
     def init(request)
-      add_instrumentation_data(method: Methods::INITIALIZE)
       {
         protocolVersion: configuration.protocol_version,
         capabilities: capabilities,
@@ -185,12 +184,10 @@ module MCP
     end
 
     def list_tools(request)
-      add_instrumentation_data(method: Methods::TOOLS_LIST)
       @tools.map { |_, tool| tool.to_h }
     end
 
     def call_tool(request)
-      add_instrumentation_data(method: Methods::TOOLS_CALL)
       tool_name = request[:name]
       tool = tools[tool_name]
       unless tool
@@ -224,12 +221,10 @@ module MCP
     end
 
     def list_prompts(request)
-      add_instrumentation_data(method: Methods::PROMPTS_LIST)
       @prompts.map { |_, prompt| prompt.to_h }
     end
 
     def get_prompt(request)
-      add_instrumentation_data(method: Methods::PROMPTS_GET)
       prompt_name = request[:name]
       prompt = @prompts[prompt_name]
       unless prompt
@@ -246,21 +241,16 @@ module MCP
     end
 
     def list_resources(request)
-      add_instrumentation_data(method: Methods::RESOURCES_LIST)
-
       @resources.map(&:to_h)
     end
 
     # Server implementation should set `resources_read_handler` to override no-op default
     def read_resource_no_content(request)
-      add_instrumentation_data(method: Methods::RESOURCES_READ)
       add_instrumentation_data(resource_uri: request[:uri])
       []
     end
 
     def list_resource_templates(request)
-      add_instrumentation_data(method: Methods::RESOURCES_TEMPLATES_LIST)
-
       @resource_templates.map(&:to_h)
     end
 
