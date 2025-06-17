@@ -57,7 +57,7 @@ The client will demonstrate:
 - Listing and reading resources
 - Session cleanup
 
-### 4. SSE Test Server (`sse_test_server.rb`)
+### 4. Streamable HTTP Server (`streamable_http_server.rb`)
 A specialized HTTP server designed to test and demonstrate Server-Sent Events (SSE) functionality in the MCP protocol.
 
 **Features:**
@@ -71,12 +71,12 @@ A specialized HTTP server designed to test and demonstrate Server-Sent Events (S
 
 **Usage:**
 ```bash
-ruby examples/sse_test_server.rb
+ruby examples/streamable_http_server.rb
 ```
 
 The server will start on `http://localhost:9393` and provide detailed instructions for testing SSE functionality.
 
-### 5. SSE Test Client (`sse_test_client.rb`)
+### 5. Streamable HTTP Client (`streamable_http_client.rb`)
 An interactive client that connects to the SSE stream and provides a menu-driven interface for testing SSE functionality.
 
 **Features:**
@@ -88,12 +88,12 @@ An interactive client that connects to the SSE stream and provides a menu-driven
 **Usage:**
 1. Start the SSE test server in one terminal:
    ```bash
-   ruby examples/sse_test_server.rb
+   ruby examples/streamable_http_server.rb
    ```
 
 2. Run the SSE test client in another terminal:
    ```bash
-   ruby examples/sse_test_client.rb
+   ruby examples/streamable_http_client.rb
    ```
 
 The client will:
