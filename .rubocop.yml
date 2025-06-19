@@ -4,3 +4,6 @@ inherit_gem:
 plugins:
   - rubocop-minitest
   - rubocop-rake
+
+Gemspec/DevelopmentDependencies:
+  Enabled: true

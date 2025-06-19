@@ -7,11 +7,18 @@ gemspec
 
 # Specify development dependencies below
 gem "minitest", "~> 5.1", require: false
-gem "rake", "~> 13.0"
-gem "rubocop-minitest"
-gem "rubocop-rake"
-gem "rubocop-shopify", require: false
-
 gem "minitest-reporters"
 gem "mocha"
+
+gem "rubocop-minitest", require: false
+gem "rubocop-rake", require: false
+gem "rubocop-shopify", require: false
+
+gem "puma", ">= 5.0.0"
+gem "rack", ">= 2.0.0"
+gem "rackup", ">= 2.1.0"
+
+gem "activesupport"
 gem "debug"
+gem "rake", "~> 13.0"
+gem "sorbet-static-and-runtime"
