@@ -6,6 +6,7 @@ on:
       - 'lib/mcp/version.rb'
 jobs:
   publish_gem:
+    if: github.repository_owner == 'modelcontextprotocol'
     name: Release Gem Version to RubyGems.org
     runs-on: ubuntu-latest
     permissions:
